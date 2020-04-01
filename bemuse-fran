@@ -103,6 +103,9 @@ bemuse_track 07 right \
     --filter=$(make_filter crop=1920:864:0:100,scale=1920x864) \
     --thumbnail-from=66
 
+# Cold Walls
+bemuse_track 08 right
+
 # When Things Are Said
 bemuse_track 25 100
 

@@ -84,6 +84,10 @@ bemuse_track 02 right
 # Mr. Midnight
 bemuse_track 03 right
 
+# The White Rabbit
+bemuse_track 04 right \
+    --filter=$ITHERSTA_FILTER
+
 # A Little Talk
 bemuse_track 05 right \
     --thumbnail-from=30

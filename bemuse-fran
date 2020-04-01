@@ -97,6 +97,12 @@ bemuse_track 06 right \
     --filter=$CUTSCENE_FILTER \
     --thumbnail-from=10
 
+# It Hunts Me
+bemuse_track 07 right \
+    --video-offset=0.9 \
+    --filter=$(make_filter crop=1920:864:0:100,scale=1920x864) \
+    --thumbnail-from=66
+
 # When Things Are Said
 bemuse_track 25 100
 

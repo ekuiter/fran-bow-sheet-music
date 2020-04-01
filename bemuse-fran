@@ -1,0 +1,105 @@
+#!/bin/bash
+# usage: [LORES=y] ./bemuse-fran [<num> [args...]]
+# args are passed to bemuse, num is 0 if not set (which bemuses all tracks)
+# pass --keep to avoid overriding existing files
+# to upload a specific track to Sheethost and YouTube, run
+# ./bemuse-fran <num> --sheethost-username=<username> --sheethost-password=<password> --youtube-secret=<secret>
+
+if [ $# -gt 0 ] && [[ $1 -ne 0 ]]; then ONLY_NUM=$1; fi
+shift
+if [[ -z $LORES ]]; then
+    ARGS=$@
+else
+    ARGS="--width=960 --height=540 --framerate=30 $@"
+fi
+
+cp fran-bow.ini fran-bow.ini.bak
+trap "rm -f fran-bow.ini.bak" EXIT
+
+make_filter() {
+    SCALE_X=$(echo $1 | sed "s#.*scale=\([0-9]*\)x.*#\1#")
+    SCALE_Y=$(echo $1 | sed "s#.*x\([0-9]*\).*#\1#")
+    if [[ -z $LORES ]]; then
+        echo $1
+    else
+        echo $1 | sed "s#scale=\([0-9]*\)x#scale=$(echo "$SCALE_X / 2" \
+            | bc)x#" | sed "s#x\([0-9]*\)#x$(echo "$SCALE_Y / 2" | bc)#g" \
+            | sed -r "s#(.*):(.*):(.*):(.*),scale#\1/2:\2/2:\3/2:\4/2,scale#g"
+    fi
+}
+
+bemuse_track() {
+    NUM=$1
+    SCORE=$(ls input/$NUM*.mscz | head -n1)
+    if [[ $2 = left ]]; then
+        POS=0
+    elif [[ $2 = right ]]; then
+        POS=1250
+    else
+        POS=$2
+    fi
+    if [[ -z $ONLY_NUM ]] || [[ $ONLY_NUM = $NUM ]]; then
+        echo "Bemusing $SCORE ..."
+        TITLE=$(basename "$SCORE" .mscz | sed "s/^[0-9. ]*//")
+        if [[ ! -z $DESCRIPTION ]]; then DESCRIPTION="$DESCRIPTION\n\n"; fi
+        if [[ ! -z $PUBLISH_AT ]]; then PUBLISH_AT=" --publish-at=$PUBLISH_AT"; fi
+        NUM="$NUM" TITLE="$TITLE" bemuse \
+                --directory=output \
+                --state=fran-bow.ini \
+                --filter=$DEFAULT_FILTER \
+                --overlay=W/2-w/2:0 \
+                --chroma="chroma/$NUM.mp4" \
+                --thumbnail-convert="( fran-bow.png -scale 140% -repage +$POS-40 ) -flatten" \
+                --sheethost-metadata=fran-bow.meta \
+                --youtube-options='--title="Fran Bow - '"$TITLE"' (Piano Sheet Music)" --description="↓ Download links (PDF & MIDI) in the description ↓\n\nSong: '"$TITLE"'
+Source: Fran Bow\n\nComposer: Isak Martinsson\n\n'"$DESCRIPTION"'*** PDF and MIDI download ***\nhttp://dl.elias-kuiter.de/piano/fran-bow.html" --category=Music --tags="Fran Bow, Piano, Sheet Music, Isak Martinsson, Synthesia" --playlist=Arrangements'"$PUBLISH_AT" \
+                $ARGS "$SCORE"
+    else
+        echo "Skipping $SCORE."
+    fi
+}
+
+with_state() {
+    sed -i "$1s/.*/$2/" fran-bow.ini
+    shift
+    shift
+    "$@"
+    cp fran-bow.ini.bak fran-bow.ini
+}
+
+DEFAULT_SCALE=1580x864
+DEFAULT_FILTER=$(make_filter crop=1480:810:220:110,scale=$DEFAULT_SCALE)
+CUTSCENE_FILTER=$(make_filter crop=1510:840:205:80,scale=$DEFAULT_SCALE)
+ITHERSTA_FILTER=$(make_filter crop=1460:790:210:100,scale=$DEFAULT_SCALE)
+
+# Bedtime Story
+bemuse_track 01 right \
+    --video-offset=1.5 \
+    --filter=$CUTSCENE_FILTER \
+    --thumbnail-from=30
+
+# Finding The Truth
+bemuse_track 02 right
+
+# Mr. Midnight
+bemuse_track 03 right
+
+# A Little Talk
+bemuse_track 05 right \
+    --thumbnail-from=30
+
+# Black Tears
+bemuse_track 06 right \
+    --filter=$CUTSCENE_FILTER \
+    --thumbnail-from=10
+
+# When Things Are Said
+bemuse_track 25 100
+
+# Between Black And White
+bemuse_track 43 - --skip-video
+bemuse_track 43b right \
+    --video-offset=1 \
+    --filter=$(make_filter crop=1301:665:299:100,scale=1690x864,setpts=0.61*PTS) \
+    --colorkey=0x000000:0.35:0.35 \
+    --thumbnail-from=7

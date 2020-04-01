@@ -1,0 +1,12 @@
+_legacy
+.git_old
+*.jpg
+*.mid
+*.mp3
+*.mp4
+*.pdf
+*.mscz,
+*.aep
+*.xlsx
+output
+secret.json

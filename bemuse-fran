@@ -106,6 +106,9 @@ bemuse_track 07 right \
 # Cold Walls
 bemuse_track 08 right
 
+# Get Rid Of The Dirt
+bemuse_track 20 left
+
 # When Things Are Said
 bemuse_track 25 100
 

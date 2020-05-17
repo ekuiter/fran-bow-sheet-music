@@ -5,7 +5,7 @@
 # to upload a specific track to Sheethost and YouTube, run
 # ./bemuse-fran <num> --sheethost-username=<username> --sheethost-password=<password> --youtube-secret=<secret>
 
-if [ $# -gt 0 ] && [[ $1 -ne 0 ]]; then ONLY_NUM=$1; fi
+if [ $# -gt 0 ] && [ $1 -ne 0 ]; then ONLY_NUM=$1; fi
 shift
 if [[ -z $LORES ]]; then
     ARGS=$@
@@ -38,6 +38,8 @@ bemuse_track() {
     else
         POS=$2
     fi
+    shift
+    shift
     if [[ -z $ONLY_NUM ]] || [[ $ONLY_NUM = $NUM ]]; then
         echo "Bemusing $SCORE ..."
         TITLE=$(basename "$SCORE" .mscz | sed "s/^[0-9. ]*//")
@@ -51,9 +53,8 @@ bemuse_track() {
                 --chroma="chroma/$NUM.mp4" \
                 --thumbnail-convert="( fran-bow.png -scale 140% -repage +$POS-40 ) -flatten" \
                 --sheethost-metadata=fran-bow.meta \
-                --youtube-options='--title="Fran Bow - '"$TITLE"' (Piano Sheet Music)" --description="↓ Download links (PDF & MIDI) in the description ↓\n\nSong: '"$TITLE"'
-Source: Fran Bow\n\nComposer: Isak Martinsson\n\n'"$DESCRIPTION"'*** PDF and MIDI download ***\nhttp://dl.elias-kuiter.de/piano/fran-bow.html" --category=Music --tags="Fran Bow, Piano, Sheet Music, Isak Martinsson, Synthesia" --playlist=Arrangements'"$PUBLISH_AT" \
-                $ARGS "$SCORE"
+                --youtube-options='--title="Fran Bow - '"$TITLE"' (Piano Sheet Music)" --description="↓ Download links (PDF & MIDI) in the description ↓\n\nSong: '"$TITLE"'\nSource: Fran Bow\nComposer: Isak Martinsson\n\n'"$DESCRIPTION"'*** PDF and MIDI download ***\nhttp://dl.elias-kuiter.de/piano/fran-bow.html" --category=Music --tags="Fran Bow, Piano, Sheet Music, Isak Martinsson, Synthesia" --playlist=Arrangements'"$PUBLISH_AT" \
+                $@ $ARGS "$SCORE"
     else
         echo "Skipping $SCORE."
     fi
@@ -72,30 +73,62 @@ DEFAULT_FILTER=$(make_filter crop=1480:810:220:110,scale=$DEFAULT_SCALE)
 CUTSCENE_FILTER=$(make_filter crop=1510:840:205:80,scale=$DEFAULT_SCALE)
 ITHERSTA_FILTER=$(make_filter crop=1460:790:210:100,scale=$DEFAULT_SCALE)
 
-# Bedtime Story
-bemuse_track 01 right \
-    --video-offset=1.5 \
-    --filter=$CUTSCENE_FILTER \
-    --thumbnail-from=30
+# The Bow Family
+PUBLISH_AT="2020-05-19T15:00:00.00+02:00" \
+DESCRIPTION="Thanks for tuning in! Many of you have subscribed and wished for more Fran Bow content over the last years.\nI still love the game and its soundtrack, and in these times, we must focus on what truly matters ... which is making piano arrangements, of course :D\n\nSo I'm happy to tell you that I've decided to create piano collections for the entire soundtrack, including updated versions of my old arrangements.\nFor now, I'll upload two videos per week (on Tuesday and Friday) so I have some time to prepare the arrangements as we go.\n\nI also thought it would be nice to experience the songs as they appear in-game, so we can follow along with Fran's journey.\n(So that's why I'm starting with track 42 on the soundtrack, in case you wondered - it's not in the game, but in the trailer.)\n\nThanks for watching - I hope you'll stick around for my new videos! :)" \
+bemuse_track 42 right \
+    --video-offset=-0.5
 
-# Finding The Truth
-bemuse_track 02 right
+# Sitting In Company
+PUBLISH_AT="2020-05-22T15:00:00.00+02:00" \
+DESCRIPTION="Everything's fine ... It feels like heaven." \
+bemuse_track 17 right \
+    --video-offset=1 \
+    --filter=$CUTSCENE_FILTER
 
-# Mr. Midnight
-bemuse_track 03 right
-
-# The White Rabbit
-bemuse_track 04 right \
-    --filter=$ITHERSTA_FILTER
-
-# A Little Talk
-bemuse_track 05 right \
-    --thumbnail-from=30
+# Inside The Children's Head
+PUBLISH_AT="2020-05-26T15:00:00.00+02:00" \
+DESCRIPTION="Fran has a therapy session with Dr. Deern." \
+bemuse_track 12 right
 
 # Black Tears
+PUBLISH_AT="2020-05-29T15:00:00.00+02:00" \
+DESCRIPTION="I will hunt you down, catch you, and bring you back to insanity." \
 bemuse_track 06 right \
     --filter=$CUTSCENE_FILTER \
     --thumbnail-from=10
+
+# Details Omitted
+PUBLISH_AT="2020-06-02T15:00:00.00+02:00" \
+DESCRIPTION="Fran explores the institution." \
+bemuse_track 09 right
+
+# Philmore Paranoid
+PUBLISH_AT="2020-06-05T15:00:00.00+02:00" \
+DESCRIPTION="A forgotten girl with no family or cat will die when the moon arrives." \
+bemuse_track 23 right \
+    --video-offset=0.6
+
+# Finding The Truth
+PUBLISH_AT="2020-06-09T15:00:00.00+02:00" \
+DESCRIPTION="Who could have killed Fran's parents?" \
+bemuse_track 02 right
+
+# My Friend Is Leaving
+PUBLISH_AT="2020-06-12T15:00:00.00+02:00" \
+DESCRIPTION="Oh my dear kitty... We'll soon be together again, I promise!" \
+bemuse_track 28 right
+
+# I Can See
+PUBLISH_AT="2020-06-16T15:00:00.00+02:00" \
+DESCRIPTION="You clever little girl... Do you think you can just leave?" \
+bemuse_track 10 right
+
+# Cold Walls
+bemuse_track 08 right
+
+# Mr. Midnight
+bemuse_track 03 right
 
 # It Hunts Me
 bemuse_track 07 right \
@@ -103,14 +136,13 @@ bemuse_track 07 right \
     --filter=$(make_filter crop=1920:864:0:100,scale=1920x864) \
     --thumbnail-from=66
 
-# Cold Walls
-bemuse_track 08 right
+# A Little Talk
+bemuse_track 05 right \
+    --thumbnail-from=30
 
-# Get Rid Of The Dirt
-bemuse_track 20 left
-
-# When Things Are Said
-bemuse_track 25 100
+# The White Rabbit
+bemuse_track 04 right \
+    --filter=$ITHERSTA_FILTER
 
 # Between Black And White
 bemuse_track 43 - --skip-video
@@ -119,3 +151,15 @@ bemuse_track 43b right \
     --filter=$(make_filter crop=1301:665:299:100,scale=1690x864,setpts=0.61*PTS) \
     --colorkey=0x000000:0.35:0.35 \
     --thumbnail-from=7
+
+# Get Rid Of The Dirt
+bemuse_track 20 left
+
+# Bedtime Story
+bemuse_track 01 right \
+    --video-offset=1.5 \
+    --filter=$CUTSCENE_FILTER \
+    --thumbnail-from=30
+
+# When Things Are Said
+bemuse_track 25 100

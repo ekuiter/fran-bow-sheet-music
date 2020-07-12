@@ -5,7 +5,7 @@
 # to upload a specific track to Sheethost and YouTube, run
 # ./bemuse-fran <num> --sheethost-username=<username> --sheethost-password=<password> --youtube-secret=<secret>
 
-if [ $# -gt 0 ] && [ $1 -ne 0 ]; then ONLY_NUM=$1; fi
+if [ $# -gt 0 ] && [ $1 != 0 ]; then ONLY_NUM=$1; fi
 shift
 if [[ -z $LORES ]]; then
     ARGS=$@
@@ -124,21 +124,62 @@ PUBLISH_AT="2020-06-16T15:00:00.00+02:00" \
 DESCRIPTION="You clever little girl... Do you think you can just leave?" \
 bemuse_track 10 right
 
+# Sneaky Fran
+bemuse_track 41 - --skip-video
+PUBLISH_AT="2020-06-19T15:00:00.00+02:00" \
+DESCRIPTION="At the end of the maze, Fran..." \
+bemuse_track 41b left
+
+# They Will Find You
+PUBLISH_AT="2020-06-23T15:00:00.00+02:00" \
+DESCRIPTION="A cat full of nuts and bolts will always be your guide." \
+bemuse_track 36 right \
+    --video-offset=2 \
+    --filter=$CUTSCENE_FILTER
+
+# Lost On The Path
+PUBLISH_AT="2020-06-26T15:00:00.00+02:00" \
+DESCRIPTION="Oh... What is this place...?" \
+bemuse_track 13 right
+
+# This Is The Forest
+PUBLISH_AT="2020-06-30T15:00:00.00+02:00" \
+DESCRIPTION="Hello? Is somebody home?" \
+bemuse_track 16 right
+
+# Downstairs
+PUBLISH_AT="2020-07-03T15:00:00.00+02:00" \
+DESCRIPTION="What a curious little door..." \
+bemuse_track 11 right \
+    --video-offset=2 \
+    --filter=$CUTSCENE_FILTER
+
 # Cold Walls
+PUBLISH_AT="2020-07-07T15:00:00.00+02:00" \
+DESCRIPTION="Welcome home, beautiful kitten!" \
 bemuse_track 08 right
 
 # Mr. Midnight
+PUBLISH_AT="2020-07-10T15:00:00.00+02:00" \
+DESCRIPTION="My beloved friend! I found you!" \
 bemuse_track 03 right
+
+# Duality
+PUBLISH_AT="2020-07-14T15:00:00.00+02:00" \
+DESCRIPTION="There you are! We were waiting for you!" \
+bemuse_track 15 right
+
+# A Little Talk
+PUBLISH_AT="2020-07-17T15:00:00.00+02:00" \
+DESCRIPTION="If you don't do what we ask for... Bad things will happen to your cat." \
+bemuse_track 05 right \
+    --thumbnail-from=30
 
 # It Hunts Me
 bemuse_track 07 right \
     --video-offset=0.9 \
     --filter=$(make_filter crop=1920:864:0:100,scale=1920x864) \
     --thumbnail-from=66
-
-# A Little Talk
-bemuse_track 05 right \
-    --thumbnail-from=30
 
 # The White Rabbit
 bemuse_track 04 right \

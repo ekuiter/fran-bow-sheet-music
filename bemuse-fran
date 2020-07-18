@@ -175,7 +175,15 @@ DESCRIPTION="If you don't do what we ask for... Bad things will happen to your c
 bemuse_track 05 right \
     --thumbnail-from=30
 
+# Fluffy Toad Bun
+PUBLISH_AT="2020-07-21T15:00:00.00+02:00" \
+DESCRIPTION="Here we go! Hold on tight." \
+bemuse_track 39 right \
+	--filter=$(make_filter crop=1480:810:220:110,scale=$DEFAULT_SCALE,setpts=1.2*PTS)
+
 # It Hunts Me
+PUBLISH_AT="2020-07-24T15:00:00.00+02:00" \
+DESCRIPTION="Fraaaan! No!" \
 bemuse_track 07 right \
     --video-offset=0.9 \
     --filter=$(make_filter crop=1920:864:0:100,scale=1920x864) \

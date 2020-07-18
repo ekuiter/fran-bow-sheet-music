@@ -7,7 +7,6 @@ _legacy
 *.pdf
 *.mscz,
 *.aep
-*.xlsx
 output
 secret.json
 _footage

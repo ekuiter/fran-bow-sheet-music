@@ -53,8 +53,8 @@ bemuse_track() {
                 --chroma="chroma/$NUM.mp4" \
                 --thumbnail-convert="( fran-bow.png -scale 140% -repage +$POS-40 ) -flatten" \
                 --sheethost-metadata=fran-bow.meta \
-                --youtube-options='--title="Fran Bow - '"$TITLE"' (Piano Sheet Music)" --description="↓ Download links (PDF & MIDI) in the description ↓\n\nSong: '"$TITLE"'\nSource: Fran Bow\nComposer: Isak Martinsson\n\n'"$DESCRIPTION"'*** PDF and MIDI download ***\nhttp://dl.elias-kuiter.de/piano/fran-bow.html" --category=Music --tags="Fran Bow, Piano, Sheet Music, Isak Martinsson, Synthesia" --playlist=Arrangements'"$PUBLISH_AT" \
-                $@ $ARGS "$SCORE"
+				$@ $ARGS "$SCORE"
+                #--youtube-options='--title="Fran Bow - '"$TITLE"' (Piano Sheet Music)" --description="↓ Download links (PDF & MIDI) in the description ↓\n\nSong: '"$TITLE"'\nSource: Fran Bow\nComposer: Isak Martinsson\n\n'"$DESCRIPTION"'*** PDF and MIDI download ***\nhttp://dl.elias-kuiter.de/piano/fran-bow.html" --category=Music --tags="Fran Bow, Piano, Sheet Music, Isak Martinsson, Synthesia" --playlist=Arrangements'"$PUBLISH_AT"
     else
         echo "Skipping $SCORE."
     fi
@@ -72,6 +72,8 @@ DEFAULT_SCALE=1580x864
 DEFAULT_FILTER=$(make_filter crop=1480:810:220:110,scale=$DEFAULT_SCALE)
 CUTSCENE_FILTER=$(make_filter crop=1510:840:205:80,scale=$DEFAULT_SCALE)
 ITHERSTA_FILTER=$(make_filter crop=1460:790:210:100,scale=$DEFAULT_SCALE)
+
+if false; then
 
 # The Bow Family
 PUBLISH_AT="2020-05-19T15:00:00.00+02:00" \
@@ -188,6 +190,11 @@ bemuse_track 07 right \
     --video-offset=0.9 \
     --filter=$(make_filter crop=1920:864:0:100,scale=1920x864) \
     --thumbnail-from=66
+	
+# Take Me Home
+DESCRIPTION="After the pain ... we will always rise." \
+bemuse_track 24 right \
+    --filter=$CUTSCENE_FILTER
 
 # The White Rabbit
 bemuse_track 04 right \
@@ -212,3 +219,10 @@ bemuse_track 01 right \
 
 # When Things Are Said
 bemuse_track 25 100
+
+bemuse_track 24 right --filter=$CUTSCENE_FILTER
+
+fi
+
+bemuse_track 18 right --filter=$ITHERSTA_FILTER
+bemuse_track 19 right --filter=$ITHERSTA_FILTER
